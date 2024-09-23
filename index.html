@@ -202,26 +202,50 @@
 	  </div>
 	<script>
 		function submitDate(){
-			
-			const input_year = document.getElementById('inputYear').value;
-			const input_month = document.getElementById('inputMonth').value;
-			const input_day = document.getElementById('inputDay').value;
-			checkDate(input_year,input_month,input_day);
+			input_month = 0;
+			input_year = 0;
+			input_day = 0;
+			input_year = document.getElementById('inputYear').value;
+			input_month = document.getElementById('inputMonth').value;
+			input_day = document.getElementById('inputDay').value;
+			combined_date = [input_year,input_month,input_day];
+			checkDate(combined_date);
 			
 		}
-		function changeOutput(output_year, output_month, output_day){
-			document.getElementById('outputYear').innerText = output_year;
-			document.getElementById('outputMonth').innerText = output_month;
-			document.getElementById('outputDay').innerText = output_day;
+		function changeOutput(output_dateArr){
+			document.getElementById('outputYear').innerText = output_dateArr[0];
+			document.getElementById('outputMonth').innerText = output_dateArr[1];
+			document.getElementById('outputDay').innerText = output_dateArr[2];
 		}
-		function checkDate(input_year,input_month,input_day){
+		function animationOutput(){
+		}
+		function checkDate(combined_date){
 			const current_date = new Date();
-			output_year = current_date.getFullYear() - input_year;
-			output_month = current_date.getMonth() - input_month;
-			output_day = current_date.getDay() - input_day;
-			changeOutput(output_year,output_month,output_day);
+			output_dateArr = [];
+			combined_date = inputValidation(combined_date);
+			output_dateArr.push(current_date.getFullYear() - combined_date[0]);
+			output_dateArr.push(current_date.getMonth() - combined_date[1]);
+			output_dateArr.push(current_date.getDay() - combined_date[2]);
+			changeOutput(output_dateArr);
 		}
-		function inputValidation(){
+		function inputValidation(combined_date){
+			invalid_counter = 0;
+			invalid_listArr = [];
+			invalid_listArr.push(inputValidation_empty(combined_date));
+			if(invalid_counter == 0){
+				alert(invalid_listArr)
+				return(combined_date);
+			}
+		}
+		function inputValidation_empty(){
+			return null;
+		}
+		function inputValidation_day(){}
+		function inputValidation_month(){}
+		function inputValidation_future(){}
+		function inputValidation_wrong(){}
+		
+		function inputInvalid(){
 		}
 	</script>
 	</body>
