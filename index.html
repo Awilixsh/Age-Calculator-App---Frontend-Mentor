@@ -191,9 +191,9 @@
 				</section>
 			</form>
 			<section id = 'sectionOutput'>
-				<p><span id = 'outputYears' class = 'colorPurple'>--</span> years</p>
-				<p><span id = 'outputMonths'class = 'colorPurple'>--</span> months</p>
-				<p><span id = 'outputDays'class = 'colorPurple'>--</span> days</p>
+				<p><span id = 'outputYear' class = 'colorPurple'>--</span> years</p>
+				<p><span id = 'outputMonth'class = 'colorPurple'>--</span> months</p>
+				<p><span id = 'outputDay'class = 'colorPurple'>--</span> days</p>
 			</section>
 		</main>
 	  <div class="attribution">
@@ -202,17 +202,24 @@
 	  </div>
 	<script>
 		function submitDate(){
-			const current_date = new Date();
+			
 			const input_year = document.getElementById('inputYear').value;
 			const input_month = document.getElementById('inputMonth').value;
 			const input_day = document.getElementById('inputDay').value;
-			changeOutput();
-			alert(current_date.getFullYear());
+			checkDate(input_year,input_month,input_day);
+			
 		}
-		function changeOutput(){
-			document.getElementById('outputYears').innerText = 11;
+		function changeOutput(output_year, output_month, output_day){
+			document.getElementById('outputYear').innerText = output_year;
+			document.getElementById('outputMonth').innerText = output_month;
+			document.getElementById('outputDay').innerText = output_day;
 		}
-		function checkDate(){
+		function checkDate(input_year,input_month,input_day){
+			const current_date = new Date();
+			output_year = current_date.getFullYear() - input_year;
+			output_month = current_date.getMonth() - input_month;
+			output_day = current_date.getDay() - input_day;
+			changeOutput(output_year,output_month,output_day);
 		}
 		function inputValidation(){
 		}
