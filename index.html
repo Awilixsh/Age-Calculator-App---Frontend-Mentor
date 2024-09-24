@@ -18,6 +18,10 @@
 		font-family: Poppins-extrabolditalic;
 		src: url('./assets/fonts/Poppins-ExtraBoldItalic.ttf');
 	}
+	@font-face{
+		font-family: Poppins-italic;
+		src: url('./assets/fonts/Poppins-Italic.ttf');
+	}
 	.colorPurple{
 		color: hsl(259, 100%, 65%);
 	}
@@ -91,6 +95,10 @@
 	#inputDay{
 		grid-row: 2/3;
 	}
+	#inputDayError{
+		grid-row: 4/5;
+		grid-column: 1/2;
+	}
 	#pMonth{
 		grid-column: 2/3;
 		grid-row: 1/2;
@@ -98,12 +106,25 @@
 	#inputMonth{
 		grid-row: 2/3;
 	}
+	#inputMonthError{
+		grid-row: 4/5;
+		grid-column: 2/3;
+	}
 	#pYear{
 		grid-column: 3/4;
 		grid-row: 1/2;
 	}
 	#inputYear{
 		grid-row: 2/3;
+	}
+	#inputYearError{
+		grid-row: 4/5;
+		grid-column: 3/4;
+	}
+	.labelError{
+		font-family: Poppins-italic;
+		font-size: 8px;
+		margin-top: -14px;
 	}
 	input{
 		font-size: 32px;
@@ -131,9 +152,11 @@
 		grid-column: 2/3;
 		grid-row: 4/5;
 		margin-top: 6px;
+		border: 0px solid;
 	}
 	#imgArrowBG:active{
 		background-color: hsl(0, 0%, 8%);
+		border: 0px solid;
 	}
 	#imgArrow{
 		width: 26px;
@@ -175,19 +198,22 @@
 </head>
 	<body>
 		<main>
-			<form>
+			<form id = 'formDate'>
 				<section id = 'sectionInput'>
 					<p id = 'pDay'>DAY</p>
 					<input autocomplete='off' id = 'inputDay' type = 'text' placeholder = "DD">
+					<label id = 'inputDayError' class = 'labelError colorLightred'></label>
 					<p id = 'pMonth'>MONTH</p>
 					<input autocomplete='off' id = 'inputMonth' type = 'text' placeholder = "MM">
+					<label id = 'inputMonthError' class = 'labelError colorLightred'></label>
 					<p id = 'pYear'>YEAR</p>
 					<input autocomplete='off' id = 'inputYear' type = 'text' placeholder = "YYYY">
+					<label id = 'inputYearError' class = 'labelError colorLightred'></label>
 					<div id = 'separator'>
 					</div>
-					<div id = 'imgArrowBG' class = 'bgcolorPurple' onclick = 'submitDate()'>
-							<img id = 'imgArrow' src = './assets/images/icon-arrow.svg'>
-					</div>
+					<button  type='button' id = 'imgArrowBG' class = 'bgcolorPurple' onclick = 'submitDate()'>
+						<img id = 'imgArrow' src = './assets/images/icon-arrow.svg'>
+					</button>
 				</section>
 			</form>
 			<section id = 'sectionOutput'>
@@ -201,16 +227,13 @@
 		Coded by <a href="#">Awilixsh</a>.
 	  </div>
 	<script>
+
 		function submitDate(){
-			input_month = 0;
-			input_year = 0;
-			input_day = 0;
 			input_year = document.getElementById('inputYear').value;
 			input_month = document.getElementById('inputMonth').value;
 			input_day = document.getElementById('inputDay').value;
-			combined_date = [input_year,input_month,input_day];
+			combined_date = [input_day,input_month,input_year];
 			checkDate(combined_date);
-			
 		}
 		function changeOutput(output_dateArr){
 			document.getElementById('outputYear').innerText = output_dateArr[0];
@@ -220,32 +243,55 @@
 		function animationOutput(){
 		}
 		function checkDate(combined_date){
+			valid_check = 1;
 			const current_date = new Date();
 			output_dateArr = [];
-			combined_date = inputValidation(combined_date);
-			output_dateArr.push(current_date.getFullYear() - combined_date[0]);
-			output_dateArr.push(current_date.getMonth() - combined_date[1]);
-			output_dateArr.push(current_date.getDay() - combined_date[2]);
-			changeOutput(output_dateArr);
-		}
-		function inputValidation(combined_date){
-			invalid_counter = 0;
-			invalid_listArr = [];
-			invalid_listArr.push(inputValidation_empty(combined_date));
-			if(invalid_counter == 0){
-				alert(invalid_listArr)
-				return(combined_date);
+			valid_check = inputValidation(combined_date);
+			if(valid_check == 1){
+				output_dateArr.push(current_date.getFullYear() - combined_date[2]);
+				output_dateArr.push((current_date.getMonth() + 1) - combined_date[1]);
+				output_dateArr.push(current_date.getDate() - combined_date[0]);
+				changeOutput(output_dateArr);
 			}
 		}
-		function inputValidation_empty(){
-			return null;
+		function inputValidation(combined_date){
+			valid_check = 1;
+			valid_check = inputValidation_empty(combined_date);
+			valid_check = inputValidation_date(combined_date);
+			return valid_check;
 		}
-		function inputValidation_day(){}
-		function inputValidation_month(){}
-		function inputValidation_future(){}
-		function inputValidation_wrong(){}
+		function inputValidation_empty(combined_date){
+			invalid_counter = 0;
+			label_Error = [null,null,null];
+			Error_empty = 'This field is required';
+			for(i = 0; i < 3; i++){
+				if(combined_date[i] == ''){
+					invalid_counter = 1;
+					label_Error[i] = Error_empty;
+				}
+			}
+			if(invalid_counter == 0){
+				return 1;
+			} else {
+				inputInvalid_label(label_Error);
+			}
+		}
+		function inputValidation_date(combined_date){
+			invalid_counter = 0;
+			label_Error = [null,null,null];
+			if(invalid_counter == 0){
+				return 1;
+			} else {
+				inputInvalid_label(label_Error);
+			}
+		}
+		function inputValidation_wrong(combined_date){}
 		
-		function inputInvalid(){
+		function inputInvalid_label(label_Error){
+			document.getElementById('inputDayError').innerText = label_Error[0];
+			document.getElementById('inputMonthError').innerText = label_Error[1];
+			document.getElementById('inputYearError').innerText = label_Error[2];
+			throw 'ERROR DATE';
 		}
 	</script>
 	</body>
