@@ -258,6 +258,7 @@
 			valid_check = 1;
 			valid_check = inputValidation_empty(combined_date);
 			valid_check = inputValidation_date(combined_date);
+			valid_check = inputValidation_wrong(combined_date);
 			return valid_check;
 		}
 		function inputValidation_empty(combined_date){
@@ -278,20 +279,42 @@
 		}
 		function inputValidation_date(combined_date){
 			invalid_counter = 0;
+			const current_date = new Date();
 			label_Error = [null,null,null];
+			error_Date = ['Must be a valid day','Must be a valid month','Must be in the past'];
+			if(combined_date[0] < 1 || combined_date[0] > 31){
+				invalid_counter = 1;
+				label_Error[0] = error_Date[0];
+			} else if(combined_date[1] < 1 || combined_date[1] > 12){
+				invalid_counter = 1;
+				label_Error[1] = error_Date[1];
+			} else if(current_date.getFullYear() < combined_date[2]){
+				invalid_counter = 1;
+				label_Error[2] = error_Date[2];
+			} 
 			if(invalid_counter == 0){
 				return 1;
 			} else {
 				inputInvalid_label(label_Error);
 			}
 		}
-		function inputValidation_wrong(combined_date){}
+		function inputValidation_wrong(combined_date){
+			label_Error = ['Must be a valid date',null,null];
+			const current_date = new Date(combined_date[2], combined_date[1], 0);
+			if(current_date.getDate() < combined_date[0]){
+				inputInvalid_label(label_Error);
+			} else {
+				return 1;
+			}
+		}
 		
 		function inputInvalid_label(label_Error){
 			document.getElementById('inputDayError').innerText = label_Error[0];
 			document.getElementById('inputMonthError').innerText = label_Error[1];
 			document.getElementById('inputYearError').innerText = label_Error[2];
 			throw 'ERROR DATE';
+		}
+		function display_reset(){
 		}
 	</script>
 	</body>
