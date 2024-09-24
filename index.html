@@ -244,14 +244,9 @@
 		}
 		function checkDate(combined_date){
 			valid_check = 1;
-			const current_date = new Date();
-			output_dateArr = [];
 			valid_check = inputValidation(combined_date);
 			if(valid_check == 1){
-				output_dateArr.push(current_date.getFullYear() - combined_date[2]);
-				output_dateArr.push((current_date.getMonth() + 1) - combined_date[1]);
-				output_dateArr.push(current_date.getDate() - combined_date[0]);
-				changeOutput(output_dateArr);
+				changeOutput(dateCompute(combined_date));
 			}
 		}
 		function inputValidation(combined_date){
@@ -288,10 +283,22 @@
 			} else if(combined_date[1] < 1 || combined_date[1] > 12){
 				invalid_counter = 1;
 				label_Error[1] = error_Date[1];
-			} else if(current_date.getFullYear() < combined_date[2]){
+			} 
+			if(current_date.getFullYear() < combined_date[2]){
 				invalid_counter = 1;
 				label_Error[2] = error_Date[2];
-			} 
+				label_Error[1] = error_Date[2];
+				label_Error[0] = error_Date[2]
+			} else if(current_date.getFullYear() <= combined_date[2] 
+			&& (current_date.getMonth()+1) < combined_date[1]){
+				invalid_counter = 1;
+				label_Error[1] = error_Date[2];
+				label_Error[0] = error_Date[2];
+			} else if(current_date.getFullYear() <= combined_date[2] 
+			&& (current_date.getDate()) < combined_date[0]){
+				invalid_counter = 1;
+				label_Error[0] = error_Date[2];
+			}
 			if(invalid_counter == 0){
 				return 1;
 			} else {
@@ -314,6 +321,24 @@
 			document.getElementById('inputYearError').innerText = label_Error[2];
 			throw 'ERROR DATE';
 		}
+		function dateCompute(combined_date){
+			const current_date = new Date();
+			const current_dateDay = new Date(combined_date[2],combined_date[1]-1,0);
+			output_dateArr = [null,null,null];
+			
+			if(current_date.getDate() < combined_date[0]){
+				output_dateArr[2] = current_dateDay.getDate() - (combined_date[0]-current_date.getDate());
+			} else {
+				output_dateArr[2] = current_date.getDate() - combined_date[0];
+			}
+			
+			output_dateArr[1] = (current_date.getMonth() + 1) - combined_date[1];
+			output_dateArr[0] = current_date.getFullYear() - combined_date[2];
+			return output_dateArr;
+		}
+		// output_dateArr.push(current_date.getFullYear() - combined_date[2]);
+		// output_dateArr.push((current_date.getMonth() + 1) - combined_date[1]);
+		// output_dateArr.push(current_date.getDate() - combined_date[0]);
 		function display_reset(){
 		}
 	</script>
