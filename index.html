@@ -331,9 +331,13 @@
 			} else {
 				output_dateArr[2] = current_date.getDate() - combined_date[0];
 			}
-			
-			output_dateArr[1] = (current_date.getMonth() + 1) - combined_date[1];
-			output_dateArr[0] = current_date.getFullYear() - combined_date[2];
+			if(current_date.getMonth() < combined_date[1]){
+				output_dateArr[1] = 12 - (combined_date[1] - (current_date.getMonth() + 1));
+				output_dateArr[0] = current_date.getFullYear() - combined_date[2] - 1;
+			} else {
+				output_dateArr[1] = (current_date.getMonth() + 1) - combined_date[1];
+				output_dateArr[0] = current_date.getFullYear() - combined_date[2];
+			}
 			return output_dateArr;
 		}
 		// output_dateArr.push(current_date.getFullYear() - combined_date[2]);
