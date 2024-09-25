@@ -73,7 +73,6 @@
 		display: grid;
 		margin-top: 100px;
 		background-color: hsl(0,0%,100%);
-		height: 480px;
 		border-radius: 20px 20px 110px 20px;
 	}
 	form{
@@ -121,18 +120,28 @@
 		grid-row: 4/5;
 		grid-column: 3/4;
 	}
+	.inputBase{
+		font-size: 12px;
+		letter-spacing: 2px;
+	}
 	.labelError{
 		font-family: Poppins-italic;
-		font-size: 8px;
-		margin-top: -14px;
+		font-size: 10px;
+	}
+	.textError{
+		color:  hsl(0, 100%, 67%);
+	}
+	.inputError{
+		border: 1px solid  hsl(0, 100%, 67%);
 	}
 	input{
-		font-size: 32px;
+		font-size: 26px;
 		font-family: Poppins-extrabold;
 		border-radius: 8px;
 		width: 80px;
-		height: 55px;
+		height: 60px;
 		border: 1px solid hsla(0,0%,8%, 0.2);
+		padding-left: 12px;
 	}
 	#separator{
 		border-bottom: 1px solid hsla(0, 0%, 8%, 0.2);
@@ -172,14 +181,15 @@
 	@media screen and (min-width: 391px){
 		main{
 			width: 700px;
+			height: 550px;
 			margin: auto;
-			margin-top: 10%;
+			margin-top: 8%;
 		}
 		#sectionInput{
-			grid-template-columns: repeat(5, 1fr);
+			grid-template-columns: 26% 26% 26% 5% 15%;
 		}
 		input{
-			width: 100px;
+			width: 120px;
 		}
 		#separator{
 			grid-column: 1/6;
@@ -187,9 +197,32 @@
 		#imgArrowBG{
 			grid-column: 5/6;
 			margin-right: 30px;
+			width: 77px;
+			height: 77px;
+		}
+		#imgArrow{
+			width: 36px;
 		}
 		#sectionOutput{
 			padding-left: 24px;
+		}
+		#sectionOutput{
+			font-size: 80px;
+			margin-top: 20px;
+		}
+	}
+	@media screen and (max-width: 390px){
+		main{
+			height: 520px;
+		}
+		#separator{
+			padding-top: 60px;
+		}
+		#imgArrowBG{
+			margin-top: 26px;
+		}
+		#sectionOutput{
+			margin-top: 40px;
 		}
 	}
     .attribution { font-size: 11px; text-align: center; }
@@ -200,13 +233,13 @@
 		<main>
 			<form id = 'formDate'>
 				<section id = 'sectionInput'>
-					<p id = 'pDay'>DAY</p>
+					<p class = 'inputBase colorSmokeygrey' id = 'pDay'>DAY</p>
 					<input autocomplete='off' id = 'inputDay' type = 'text' placeholder = "DD">
 					<label id = 'inputDayError' class = 'labelError colorLightred'></label>
-					<p id = 'pMonth'>MONTH</p>
+					<p class = 'inputBase colorSmokeygrey' id = 'pMonth'>MONTH</p>
 					<input autocomplete='off' id = 'inputMonth' type = 'text' placeholder = "MM">
 					<label id = 'inputMonthError' class = 'labelError colorLightred'></label>
-					<p id = 'pYear'>YEAR</p>
+					<p class = 'inputBase colorSmokeygrey' id = 'pYear'>YEAR</p>
 					<input autocomplete='off' id = 'inputYear' type = 'text' placeholder = "YYYY">
 					<label id = 'inputYearError' class = 'labelError colorLightred'></label>
 					<div id = 'separator'>
@@ -229,6 +262,7 @@
 	<script>
 
 		function submitDate(){
+			display_reset();
 			input_year = document.getElementById('inputYear').value;
 			input_month = document.getElementById('inputMonth').value;
 			input_day = document.getElementById('inputDay').value;
@@ -313,14 +347,7 @@
 			} else {
 				return 1;
 			}
-		}
-		
-		function inputInvalid_label(label_Error){
-			document.getElementById('inputDayError').innerText = label_Error[0];
-			document.getElementById('inputMonthError').innerText = label_Error[1];
-			document.getElementById('inputYearError').innerText = label_Error[2];
-			throw 'ERROR DATE';
-		}
+		}		
 		function dateCompute(combined_date){
 			const current_date = new Date();
 			const current_dateDay = new Date(combined_date[2],combined_date[1]-1,0);
@@ -340,10 +367,34 @@
 			}
 			return output_dateArr;
 		}
-		// output_dateArr.push(current_date.getFullYear() - combined_date[2]);
-		// output_dateArr.push((current_date.getMonth() + 1) - combined_date[1]);
-		// output_dateArr.push(current_date.getDate() - combined_date[0]);
+		function inputInvalid_label(label_Error){
+			if(label_Error[0] != null){
+				document.getElementById('inputDayError').innerText = label_Error[0];
+				document.getElementById('inputDay').classList.add('inputError');
+				document.getElementById('pDay').classList.add('textError');
+			} 
+			if (label_Error[1] != null){
+				document.getElementById('inputMonthError').innerText = label_Error[1];
+				document.getElementById('inputMonth').classList.add('inputError');
+				document.getElementById('pMonth').classList.add('textError');
+			} 
+			if (label_Error[2] != null){
+				document.getElementById('inputYearError').innerText = label_Error[2];
+				document.getElementById('inputYear').classList.add('inputError');
+				document.getElementById('pYear').classList.add('textError');
+			}
+			throw 'ERROR DATE';
+		}
 		function display_reset(){
+			document.getElementById('inputDayError').innerText = null;
+			document.getElementById('inputMonthError').innerText = null;
+			document.getElementById('inputYearError').innerText = null;
+			document.getElementById('inputDay').classList.remove('inputError');
+			document.getElementById('inputMonth').classList.remove('inputError');
+			document.getElementById('inputYear').classList.remove('inputError');
+			document.getElementById('pDay').classList.remove('textError');
+			document.getElementById('pMonth').classList.remove('textError');
+			document.getElementById('pYear').classList.remove('textError');
 		}
 	</script>
 	</body>
