@@ -244,15 +244,15 @@
 					<label id = 'inputYearError' class = 'labelError colorLightred'></label>
 					<div id = 'separator'>
 					</div>
-					<button  type='button' id = 'imgArrowBG' class = 'bgcolorPurple' onclick = 'submitDate()'>
+					<button  type='button' id = 'imgArrowBG' class = 'bgcolorPurple' onclick = 'submitDate();'>
 						<img id = 'imgArrow' src = './assets/images/icon-arrow.svg'>
 					</button>
 				</section>
 			</form>
 			<section id = 'sectionOutput'>
-				<p><span id = 'outputYear' class = 'colorPurple'>--</span> years</p>
-				<p><span id = 'outputMonth'class = 'colorPurple'>--</span> months</p>
-				<p><span id = 'outputDay'class = 'colorPurple'>--</span> days</p>
+				<p><span id = 'outputYear' class = 'colorPurple outputCounter'>--</span> years</p>
+				<p><span id = 'outputMonth'class = 'colorPurple outputCounter'>--</span> months</p>
+				<p><span id = 'outputDay'class = 'colorPurple outputCounter'>--</span> days</p>
 			</section>
 		</main>
 	  <div class="attribution">
@@ -274,13 +274,36 @@
 			document.getElementById('outputMonth').innerText = output_dateArr[1];
 			document.getElementById('outputDay').innerText = output_dateArr[2];
 		}
-		function animationOutput(){
+		function animationOutput(output_dateArr){
+			const countOutput = document.querySelectorAll('.outputCounter');
+			countOutput[0].innerText = 0;
+			countOutput[1].innerText = 0;	
+			countOutput[2].innerText = 0;
+			var counter = 0;
+			var countIntervalYear = setInterval(function(){ 
+				counter += 1;
+				if(countOutput[0].innerText <= output_dateArr[0]){
+					countOutput[0].innerText = counter; 
+				} else {
+					
+					clearInterval(countIntervalYear);
+				}
+				if(countOutput[1].innerText <= output_dateArr[1]){
+					countOutput[1].innerText = counter; 
+				}
+				if(countOutput[2].innerText <= output_dateArr[2]){
+					countOutput[2].innerText = counter; 
+				}
+				}, 20);
+			countOutput[0].innerText = output_dateArr[0];
+			countOutput[1].innerText = output_dateArr[1];
+			countOutput[2].innerText = output_dateArr[2];
 		}
 		function checkDate(combined_date){
 			valid_check = 1;
 			valid_check = inputValidation(combined_date);
 			if(valid_check == 1){
-				changeOutput(dateCompute(combined_date));
+				animationOutput(dateCompute(combined_date));
 			}
 		}
 		function inputValidation(combined_date){
