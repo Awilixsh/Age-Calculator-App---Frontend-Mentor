@@ -268,11 +268,7 @@
 			input_day = document.getElementById('inputDay').value;
 			combined_date = [input_day,input_month,input_year];
 			checkDate(combined_date);
-		}
-		function changeOutput(output_dateArr){
-			document.getElementById('outputYear').innerText = output_dateArr[0];
-			document.getElementById('outputMonth').innerText = output_dateArr[1];
-			document.getElementById('outputDay').innerText = output_dateArr[2];
+			animationOutput(dateCompute(combined_date));
 		}
 		function animationOutput(output_dateArr){
 			const countOutput = document.querySelectorAll('.outputCounter');
@@ -280,30 +276,34 @@
 			countOutput[1].innerText = 0;	
 			countOutput[2].innerText = 0;
 			var counter = 0;
-			var countIntervalYear = setInterval(function(){ 
+			var countIntervalDate = setInterval(function(){ 
 				counter += 1;
-				if(countOutput[0].innerText <= output_dateArr[0]){
-					countOutput[0].innerText = counter; 
-				} else {
-					
-					clearInterval(countIntervalYear);
-				}
+				countOutput[0].innerText = counter; 
 				if(countOutput[1].innerText <= output_dateArr[1]){
 					countOutput[1].innerText = counter; 
 				}
 				if(countOutput[2].innerText <= output_dateArr[2]){
 					countOutput[2].innerText = counter; 
 				}
-				}, 20);
-			countOutput[0].innerText = output_dateArr[0];
-			countOutput[1].innerText = output_dateArr[1];
-			countOutput[2].innerText = output_dateArr[2];
+				if(countOutput[0].innerText >= output_dateArr[0] &&
+				countOutput[1].innerText >= output_dateArr[1] &&
+				countOutput[2].innerText >= output_dateArr[2]){	
+					console.log(output_dateArr);
+					countOutput[0].innerText = output_dateArr[0];
+					countOutput[1].innerText = output_dateArr[1];
+					countOutput[2].innerText = output_dateArr[2];
+					clearInterval(countIntervalDate);
+				}
+				}, 1);
 		}
+		
 		function checkDate(combined_date){
 			valid_check = 1;
 			valid_check = inputValidation(combined_date);
 			if(valid_check == 1){
-				animationOutput(dateCompute(combined_date));
+				return 1;
+			} else {
+				throw 'INVALID DATE'
 			}
 		}
 		function inputValidation(combined_date){
