@@ -41,8 +41,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here]()
-- Live Site URL: [Add live site URL here]()
+- Solution URL: [Github](https://github.com/Awilixsh/Age-Calculator-App---Frontend-Mentor)
+- Live Site URL: [Github Pages](https://awilixsh.github.io/Age-Calculator-App---Frontend-Mentor/)
 
 ## My process
 
